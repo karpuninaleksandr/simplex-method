@@ -13,24 +13,25 @@ public class GaussMethod {
         for (int i = 0; i < problemToSolve.getMinor().size(); ++i) {
             int columnNumber = problemToSolve.getMinor().get(i) - 1;
             for (int j = 0; j < problemToSolve.getMatrix().size(); ++j)
-                if (problemToSolve.getMatrix().get(j).get(columnNumber) != 0 && problemToSolve.getMatrix().get(j).get(columnNumber) != 1) {
-                    double check = problemToSolve.getMatrix().get(j).get(columnNumber);
+                if (problemToSolve.getMatrixElement(j, columnNumber) != 0 && problemToSolve.
+                        getMatrixElement(j, columnNumber) != 1) {
+                    double check = problemToSolve.getMatrixElement(j, columnNumber);
                     removeAndAdd(j, (ArrayList<Double>) problemToSolve.getMatrix().get(j).stream().map(it -> it /= check)
                             .collect(Collectors.toList()), problemToSolve);
                 }
             int lineNumber = -1;
             for (int j = 0; j < problemToSolve.getMatrix().size(); ++j)
-                if (problemToSolve.getMatrix().get(j).get(columnNumber) == 1 && !usedLines.contains(j)) {
+                if (problemToSolve.getMatrixElement(j, columnNumber) == 1 && !usedLines.contains(j)) {
                     lineNumber = j;
                     usedLines.add(j);
                     break;
                 }
             if (lineNumber == -1) break;
             for (int j = 0; j < problemToSolve.getMatrix().size(); ++j) {
-                if (j == lineNumber || problemToSolve.getMatrix().get(j).get(columnNumber) == 0) continue;
+                if (j == lineNumber || problemToSolve.getMatrixElement(j, columnNumber) == 0) continue;
                 newLine = new ArrayList<>();
-                for (int k = 0; k < problemToSolve.getMatrix().get(j).size(); ++k) newLine.add(problemToSolve.getMatrix()
-                        .get(j).get(k) - problemToSolve.getMatrix().get(lineNumber).get(k));
+                for (int k = 0; k < problemToSolve.getMatrix().get(j).size(); ++k) newLine.add(problemToSolve
+                        .getMatrixElement(j, k) - problemToSolve.getMatrix().get(lineNumber).get(k));
                 removeAndAdd(j, newLine, problemToSolve);
             }
         }
@@ -45,7 +46,7 @@ public class GaussMethod {
             int lineNumber = -1;
             for (int j = 0; j < problemToSolve.getMatrix().size(); ++j) {
                 int finalJ = j;
-                if (Math.abs(problemToSolve.getMatrix().get(j).get(columnNumber)) != 0 &&
+                if (Math.abs(problemToSolve.getMatrixElement(j, columnNumber)) != 0 &&
                         problemToSolve.getMatrix().get(j).stream().noneMatch(it -> (problemToSolve.getMatrix().get(finalJ)
                                 .indexOf(it) != columnNumber) && Math.abs(it) != 0
                                 && problemToSolve.getMinor().contains(problemToSolve.getMatrix().get(finalJ)
@@ -58,17 +59,17 @@ public class GaussMethod {
             for (int j = 0; j < problemToSolve.getMatrix().size(); ++j) {
                 if (j == lineNumber || Math.abs(problemToSolve.getMatrix().get(j).get(columnNumber)) == 0) continue;
                 newLine = new ArrayList<>();
-                for (int k = 0; k < problemToSolve.getMatrix().get(j).size(); ++k) newLine.add(problemToSolve.getMatrix()
-                        .get(j).get(k) - (problemToSolve.getMatrix().get(j).get(columnNumber) / problemToSolve.getMatrix()
-                        .get(lineNumber).get(columnNumber)) * problemToSolve.getMatrix().get(lineNumber).get(k));
+                for (int k = 0; k < problemToSolve.getMatrix().get(j).size(); ++k) newLine.add(problemToSolve
+                        .getMatrixElement(j, k) - (problemToSolve.getMatrixElement(j, columnNumber) / problemToSolve
+                        .getMatrixElement(lineNumber, columnNumber)) * problemToSolve.getMatrixElement(lineNumber, k));
                 removeAndAdd(j, newLine, problemToSolve);
             }
         }
         for (int i = 0; i < problemToSolve.getMatrix().size(); ++i) {
             double out = 0;
             for (int j = 0; j < problemToSolve.getMinor().size(); ++j) {
-                if (problemToSolve.getMatrix().get(i).get(problemToSolve.getMinor().get(j) - 1) != 0) {
-                    out = problemToSolve.getMatrix().get(i).get(problemToSolve.getMinor().get(j) - 1);
+                if (problemToSolve.getMatrixElement(i, problemToSolve.getMinor().get(j) - 1) != 0) {
+                    out = problemToSolve.getMatrixElement(i, problemToSolve.getMinor().get(j) - 1);
                     break;
                 }
             }

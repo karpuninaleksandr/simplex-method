@@ -18,7 +18,7 @@ public class ProblemToSolve {
     }
 
     public double getMatrixElement(int row, int column) {
-        return matrix.get(row - 1).get(column - 1);
+        return matrix.get(row).get(column);
     }
 
     //todo fix method

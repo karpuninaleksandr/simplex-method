@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Matrix {
+public class ProblemToSolve {
     private ArrayList<ArrayList<Double>> matrix;
     private int amountOfColumns;
     private int amountOfRows;
+    private ArrayList<Double> function;
+    private ArrayList<Integer> minor;
 
-    public Matrix() {
+    public ProblemToSolve() {
         matrix = new ArrayList<>();
         fillTheMatrix();
     }
@@ -28,9 +30,17 @@ public class Matrix {
         return possibleElementsForStep;
     }
 
+    public ArrayList<ArrayList<Double>> getMatrix() {
+        return matrix;
+    }
+
+    public ArrayList<Integer> getMinor() {
+        return minor;
+    }
+
     public void printCurrentState() {
         for (int i = 0; i < amountOfRows; ++i) {
-            for (int j = 0; j < amountOfColumns; ++j) System.out.print(matrix.get(i).get(j) + " ");
+            for (int j = 0; j < amountOfColumns; ++j) System.out.print(String.format("%.2f", matrix.get(i).get(j)) + " ");
             System.out.println();
         }
     }
@@ -45,9 +55,12 @@ public class Matrix {
             String first = scanner.nextLine();
             amountOfRows = Integer.parseInt(first.split(" ")[0]);
             amountOfColumns = Integer.parseInt(first.split(" ")[1]);
+            function = (ArrayList<Double>) Arrays.stream(scanner.nextLine().split(" ")).map(Double::parseDouble)
+                    .collect(Collectors.toList());
             for (int i = 0; i < amountOfRows; ++i) matrix.add((ArrayList<Double>) Arrays.stream(scanner.nextLine()
                     .split(" ")).map(Double::parseDouble).collect(Collectors.toList()));
-
+            minor = (ArrayList<Integer>) Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt)
+                    .collect(Collectors.toList());
             System.out.println("done.");
         } catch (FileNotFoundException ex) {
             System.out.println("no file was found.");

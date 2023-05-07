@@ -11,10 +11,12 @@ public class ProblemToSolve {
     private int amountOfRows;
     private ArrayList<Double> function;
     private ArrayList<Integer> minor;
+    private boolean isAutomatic;
+    private boolean simulatedBasis;
 
     public ProblemToSolve() {
         matrix = new ArrayList<>();
-        fillTheMatrix();
+        getData();
     }
 
     public double getMatrixElement(int row, int column) {
@@ -33,9 +35,11 @@ public class ProblemToSolve {
     public ArrayList<ArrayList<Double>> getMatrix() {
         return matrix;
     }
-
     public ArrayList<Integer> getMinor() {
         return minor;
+    }
+    public ArrayList<Double> getFunction() {
+        return function;
     }
 
     public void printCurrentState() {
@@ -46,7 +50,7 @@ public class ProblemToSolve {
     }
 
     //temporary
-    public void fillTheMatrix() {
+    private void getData() {
         try {
             System.out.print("Checking for file... ");
             Scanner scanner = new Scanner(new File("temporary_input.txt"));
@@ -61,11 +65,24 @@ public class ProblemToSolve {
                     .split(" ")).map(Double::parseDouble).collect(Collectors.toList()));
             minor = (ArrayList<Integer>) Arrays.stream(scanner.nextLine().split(" ")).map(Integer::parseInt)
                     .collect(Collectors.toList());
+            isAutomatic = Boolean.parseBoolean(scanner.nextLine());
+            simulatedBasis = Boolean.parseBoolean(scanner.nextLine());
             System.out.println("done.");
         } catch (FileNotFoundException ex) {
             System.out.println("no file was found.");
         }
+    }
 
-
+    public boolean isAutomatic() {
+        return isAutomatic;
+    }
+    public boolean simulatedBasis() {
+        return simulatedBasis;
+    }
+    public int getAmountOfRows() {
+        return amountOfRows;
+    }
+    public int getAmountOfColumns() {
+        return amountOfColumns;
     }
 }

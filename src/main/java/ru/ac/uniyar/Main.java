@@ -5,10 +5,15 @@ public class Main {
         ProblemToSolve problemToSolve = new ProblemToSolve();
         problemToSolve.printCurrentState();
 
-        GaussMethod.straightWay(problemToSolve);
-        problemToSolve.printCurrentState();
+        if (!problemToSolve.simulatedBasis()) {
+            GaussMethod.straightWay(problemToSolve);
+            problemToSolve.printCurrentState();
 
-        GaussMethod.backwards(problemToSolve);
-        problemToSolve.printCurrentState();
+            GaussMethod.backwards(problemToSolve);
+            problemToSolve.printCurrentState();
+        }
+
+        SimplexMethod.init(problemToSolve);
+
     }
 }

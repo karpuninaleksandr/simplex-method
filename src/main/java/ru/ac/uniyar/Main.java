@@ -7,13 +7,12 @@ public class Main {
 
         if (!problemToSolve.simulatedBasis()) {
             GaussMethod.straightWay(problemToSolve);
-            problemToSolve.printCurrentState();
-
             GaussMethod.backwards(problemToSolve);
-            problemToSolve.printCurrentState();
         }
 
+        ProblemToSolve.prepareMatrix();
         SimplexMethod.init(problemToSolve);
+
         while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) SimplexMethod.makeStep(problemToSolve);
 
     }

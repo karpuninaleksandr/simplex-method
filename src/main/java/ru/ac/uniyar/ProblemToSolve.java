@@ -6,9 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProblemToSolve {
-    private ArrayList<ArrayList<Double>> matrix;
-    private int amountOfColumns;
-    private int amountOfRows;
+    private static ArrayList<ArrayList<Double>> matrix;
+    private static int amountOfColumns;
+    private static int amountOfRows;
     private ArrayList<Double> function;
     private ArrayList<Integer> minor;
     private boolean isAutomatic;
@@ -71,6 +71,17 @@ public class ProblemToSolve {
             System.out.println("done.");
         } catch (FileNotFoundException ex) {
             System.out.println("no file was found.");
+        }
+    }
+
+    public static void prepareMatrix() {
+        for (int i = 0; i < amountOfRows; ++i) {
+            if (matrix.get(i).get(amountOfColumns - 1) < 0) {
+                ArrayList<Double> newLine = new ArrayList<>();
+                for (int j = 0; j < amountOfColumns; ++j) newLine.add(-1 * matrix.get(i).get(j));
+                matrix.remove(i);
+                matrix.add(i, newLine);
+            }
         }
     }
 

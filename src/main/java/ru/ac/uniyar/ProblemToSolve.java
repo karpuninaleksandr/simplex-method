@@ -13,6 +13,7 @@ public class ProblemToSolve {
     private ArrayList<Integer> minor;
     private boolean isAutomatic;
     private boolean simulatedBasis;
+    private State state;
 
     public ProblemToSolve() {
         matrix = new ArrayList<>();
@@ -84,5 +85,9 @@ public class ProblemToSolve {
     }
     public int getAmountOfColumns() {
         return amountOfColumns;
+    }
+    public State setState(State state) {
+        this.state = state;
+        return state;
     }
 }

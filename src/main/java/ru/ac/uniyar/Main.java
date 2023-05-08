@@ -14,6 +14,7 @@ public class Main {
         }
 
         SimplexMethod.init(problemToSolve);
+        while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) SimplexMethod.makeStep(problemToSolve);
 
     }
 }

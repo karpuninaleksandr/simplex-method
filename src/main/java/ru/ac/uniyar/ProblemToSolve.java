@@ -24,15 +24,6 @@ public class ProblemToSolve {
         return matrix.get(row).get(column);
     }
 
-    //todo fix method
-    public HashMap getPossibleElements() {
-        HashMap possibleElementsForStep = new HashMap<>();
-        for (int i = 0; i < amountOfRows - 1; ++i) {
-
-        }
-        return possibleElementsForStep;
-    }
-
     public ArrayList<ArrayList<Double>> getMatrix() {
         return matrix;
     }
@@ -83,6 +74,13 @@ public class ProblemToSolve {
                 matrix.add(i, newLine);
             }
         }
+    }
+
+    public void removeElement(int row, int column) {
+        matrix.get(row).remove(column);
+    }
+    public void decreaseAmountOfColumns() {
+        --amountOfColumns;
     }
 
     public boolean isAutomatic() {

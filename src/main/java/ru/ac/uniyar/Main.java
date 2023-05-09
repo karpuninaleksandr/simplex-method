@@ -13,7 +13,13 @@ public class Main {
         ProblemToSolve.prepareMatrix();
         SimplexMethod.init(problemToSolve);
 
-        while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) SimplexMethod.makeStep(problemToSolve);
+        while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) {
+            SimplexMethod.makeStep(problemToSolve);
+            problemToSolve.printCurrentState();
+        }
+
+        if (SimplexMethod.checkState(problemToSolve).equals(State.ERROR)) System.out.println("ERROR");
+        else System.out.println("DONE");
 
     }
 }

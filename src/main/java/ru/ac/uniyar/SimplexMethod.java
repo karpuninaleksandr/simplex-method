@@ -3,26 +3,27 @@ package ru.ac.uniyar;
 import java.util.ArrayList;
 
 public class SimplexMethod {
-    private static ArrayList<Double> addedXs;
-    private static ArrayList<Double> oldXs;
+    private static ArrayList<Double> leftXs;
+    private static ArrayList<Double> topXs;
     private static ArrayList<Double> functionBelow;
     private static int oldAmountOfColumns;
 
     public static void init(ProblemToSolve problemToSolve) {
         System.out.print("Simplex method init... ");
-        if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE)) {
+        if (problemToSolve.getState().equals(State.DONE)) {
             //TODO change functionBelow list
             checkState(problemToSolve);
+            System.out.println("done.");
             return;
         }
-        oldAmountOfColumns = problemToSolve.getAmountOfColumns();;
-        addedXs = new ArrayList<>();
-        for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i)
-            changeNumber(addedXs, i, problemToSolve.getAmountOfColumns() + i);
-        oldXs = new ArrayList<>();
-        for (int i = 0; i < problemToSolve.getAmountOfColumns() -1; ++i) changeNumber(oldXs, i, i + 1);
+        leftXs = new ArrayList<>();
+        topXs = new ArrayList<>();
         functionBelow = new ArrayList<>();
         if (problemToSolve.simulatedBasis()) {
+            oldAmountOfColumns = problemToSolve.getAmountOfColumns();
+            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i)
+                changeNumber(leftXs, i, problemToSolve.getAmountOfColumns() + i);
+            for (int i = 0; i < problemToSolve.getAmountOfColumns() -1; ++i) changeNumber(topXs, i, i + 1);
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
                 changeNumber(functionBelow, i, -1 * problemToSolve.getMatrixElement(0, i));
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
@@ -30,6 +31,7 @@ public class SimplexMethod {
                     changeNumber(functionBelow, i,
                             -1 * (problemToSolve.getMatrixElement(j, i)) + functionBelow.get(i));
         } else {
+            //TODO other initializations
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
                 changeNumber(functionBelow, i, problemToSolve.getFunction().get(i));
             changeNumber(functionBelow, problemToSolve.getAmountOfColumns(),
@@ -39,6 +41,7 @@ public class SimplexMethod {
     }
 
     public static void makeStep(ProblemToSolve problemToSolve) {
+        System.out.print("Simplex method step... ");
         if (problemToSolve.isAutomatic()) {
             int row = 0;
             int column = 0;
@@ -54,13 +57,12 @@ public class SimplexMethod {
                             diff = problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
                                     / problemToSolve.getMatrixElement(j, i);
                         }
-            System.out.println("row: " + row + " column: " + column);
             ArrayList<Double> oldColumn = new ArrayList<>();
             for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) oldColumn.add(i, problemToSolve.getMatrixElement(i, column));
             oldColumn.add(problemToSolve.getAmountOfRows(), functionBelow.get(column));
-            double tmp = oldXs.get(column);
-            changeNumber(oldXs, column, addedXs.get(row));
-            changeNumber(addedXs, row, tmp);
+            double tmp = topXs.get(column);
+            changeNumber(topXs, column, leftXs.get(row));
+            changeNumber(leftXs, row, tmp);
             changeNumber(problemToSolve.getMatrix().get(row), column, 1 / problemToSolve.getMatrixElement(row, column));
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i) {
                 if (i == column) continue;
@@ -86,16 +88,16 @@ public class SimplexMethod {
                 changeNumber(functionBelow, i, functionBelow.get(i)
                         - oldColumn.get(problemToSolve.getAmountOfRows()) * problemToSolve.getMatrixElement(row, i));
             }
-            if (oldXs.get(column) >= oldAmountOfColumns) {
+            if (topXs.get(column) >= oldAmountOfColumns) {
                 problemToSolve.decreaseAmountOfColumns();
-                oldXs.remove(column);
+                topXs.remove(column);
                 functionBelow.remove(column);
                 for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) problemToSolve.removeElement(i, column);
             }
-            System.out.print("");
         } else {
             //TODO make choosing of element
         }
+        System.out.println("done.");
     }
 
     public static State checkState(ProblemToSolve problemToSolve) {

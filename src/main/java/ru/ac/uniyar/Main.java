@@ -9,6 +9,7 @@ public class Main {
             GaussMethod.straightWay(problemToSolve);
             GaussMethod.backwards(problemToSolve);
         }
+        problemToSolve.printCurrentState();
 
         ProblemToSolve.prepareMatrix();
         SimplexMethod.init(problemToSolve);

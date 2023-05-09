@@ -18,12 +18,12 @@ public class SimplexMethod {
         }
         leftXs = new ArrayList<>();
         topXs = new ArrayList<>();
+        for (int i = 0; i < problemToSolve.getAmountOfColumns() -1; ++i) changeNumber(topXs, i, i + 1);
         functionBelow = new ArrayList<>();
         if (problemToSolve.simulatedBasis()) {
             oldAmountOfColumns = problemToSolve.getAmountOfColumns();
             for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i)
                 changeNumber(leftXs, i, problemToSolve.getAmountOfColumns() + i);
-            for (int i = 0; i < problemToSolve.getAmountOfColumns() -1; ++i) changeNumber(topXs, i, i + 1);
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
                 changeNumber(functionBelow, i, -1 * problemToSolve.getMatrixElement(0, i));
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
@@ -31,13 +31,31 @@ public class SimplexMethod {
                     changeNumber(functionBelow, i,
                             -1 * (problemToSolve.getMatrixElement(j, i)) + functionBelow.get(i));
         } else {
-            //TODO other initializations
+            //TODO functionBelow initialization fix
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
                 changeNumber(functionBelow, i, problemToSolve.getFunction().get(i));
             changeNumber(functionBelow, problemToSolve.getAmountOfColumns(),
                     -1 * functionBelow.get(problemToSolve.getAmountOfColumns() - 1));
+            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
+                for (int j = 0; j < problemToSolve.getAmountOfColumns() - 1; ++j) {
+                    if (problemToSolve.getMinor().contains(topXs.get(j).intValue()) && problemToSolve.getMatrixElement(i, j) != 0
+                            && problemToSolve.getMatrixElement(i, j) != -0) leftXs.add(topXs.get(j));
+                }
+            }
+            int iterator = 0;
+            while (iterator < problemToSolve.getAmountOfColumns() - 1) {
+                if (leftXs.contains(topXs.get(iterator))) {
+                    problemToSolve.decreaseAmountOfColumns();
+                    topXs.remove(iterator);
+                    functionBelow.remove(iterator);
+                    for (int j = 0; j < problemToSolve.getAmountOfRows(); ++j) problemToSolve.removeElement(j, iterator);
+                    continue;
+                }
+                ++iterator;
+            }
         }
         System.out.println("done.");
+        problemToSolve.printCurrentState();
     }
 
     public static void makeStep(ProblemToSolve problemToSolve) {

@@ -41,11 +41,10 @@ public class ProblemToSolve {
         }
     }
 
-    //temporary
     private void getData() {
         try {
             System.out.print("Checking for file... ");
-            Scanner scanner = new Scanner(new File("temporary_input.txt"));
+            Scanner scanner = new Scanner(new File("input.txt"));
             System.out.println("done.");
             System.out.print("Reading file... ");
             String first = scanner.nextLine();
@@ -59,6 +58,7 @@ public class ProblemToSolve {
                     .collect(Collectors.toList());
             isAutomatic = Boolean.parseBoolean(scanner.nextLine());
             simulatedBasis = Boolean.parseBoolean(scanner.nextLine());
+            setState(State.IN_PROGRESS);
             System.out.println("done.");
         } catch (FileNotFoundException ex) {
             System.out.println("no file was found.");
@@ -97,6 +97,9 @@ public class ProblemToSolve {
     }
     public State setState(State state) {
         this.state = state;
+        return state;
+    }
+    public State getState() {
         return state;
     }
 }

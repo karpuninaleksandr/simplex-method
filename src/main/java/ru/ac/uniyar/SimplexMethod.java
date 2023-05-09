@@ -10,6 +10,11 @@ public class SimplexMethod {
 
     public static void init(ProblemToSolve problemToSolve) {
         System.out.print("Simplex method init... ");
+        if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE)) {
+            //TODO change functionBelow list
+            checkState(problemToSolve);
+            return;
+        }
         oldAmountOfColumns = problemToSolve.getAmountOfColumns();;
         addedXs = new ArrayList<>();
         for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i)
@@ -89,7 +94,7 @@ public class SimplexMethod {
             }
             System.out.print("");
         } else {
-            //TODO
+            //TODO make choosing of element
         }
     }
 

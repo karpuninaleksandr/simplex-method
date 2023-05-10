@@ -34,7 +34,7 @@ public class SimplexMethod {
             //TODO functionBelow initialization fix
             for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
                 changeNumber(functionBelow, i, problemToSolve.getFunction().get(i));
-            changeNumber(functionBelow, problemToSolve.getAmountOfColumns(),
+            changeNumber(functionBelow, problemToSolve.getAmountOfColumns() - 1,
                     -1 * functionBelow.get(problemToSolve.getAmountOfColumns() - 1));
             for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
                 for (int j = 0; j < problemToSolve.getAmountOfColumns() - 1; ++j) {
@@ -53,6 +53,26 @@ public class SimplexMethod {
                 }
                 ++iterator;
             }
+            for (int i = 0; i < leftXs.size(); ++i) {
+                while (problemToSolve.getFunction().get(leftXs.get(i).intValue() - 1) != 0) {
+                    if (problemToSolve.getFunction().get(leftXs.get(i).intValue() - 1) < 0) {
+                        changeNumber(problemToSolve.getFunction(), leftXs.get(i).intValue() - 1,
+                                problemToSolve.getFunction().get(leftXs.get(i).intValue() - 1) + 1);
+                        for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
+                            changeNumber(functionBelow, j, functionBelow.get(j) + problemToSolve.getMatrixElement(i, j));
+                        }
+                    } else {
+                        changeNumber(problemToSolve.getFunction(), leftXs.get(i).intValue() - 1,
+                                problemToSolve.getFunction().get(leftXs.get(i).intValue() - 1) - 1);
+                        for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
+                            changeNumber(functionBelow, j, functionBelow.get(j) - problemToSolve.getMatrixElement(i, j));
+                        }
+                    }
+
+
+                }
+            }
+
         }
         System.out.println("done.");
         problemToSolve.printCurrentState();
@@ -106,7 +126,7 @@ public class SimplexMethod {
                 changeNumber(functionBelow, i, functionBelow.get(i)
                         - oldColumn.get(problemToSolve.getAmountOfRows()) * problemToSolve.getMatrixElement(row, i));
             }
-            if (topXs.get(column) >= oldAmountOfColumns) {
+            if (problemToSolve.simulatedBasis() && topXs.get(column) >= oldAmountOfColumns) {
                 problemToSolve.decreaseAmountOfColumns();
                 topXs.remove(column);
                 functionBelow.remove(column);
@@ -124,7 +144,7 @@ public class SimplexMethod {
         for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
             if (functionBelow.get(i) < 0) {
                 int finalI = i;
-                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) < 0).count() == problemToSolve.getAmountOfRows())
+                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= 0).count() == problemToSolve.getAmountOfRows())
                     return problemToSolve.setState(State.ERROR);
             }
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
@@ -136,4 +156,25 @@ public class SimplexMethod {
         if (arrayList.size() > position) arrayList.remove(position);
         arrayList.add(position, newNumber);
     }
+
+    //temporary
+    public static void getAnswer(ProblemToSolve problemToSolve) {
+        System.out.println("ANSWER:");
+        int iterator = 1;
+        while (iterator < problemToSolve.getFunction().size()) {
+            boolean flag = false;
+            for (int i = 0; i < leftXs.size(); ++i) {
+                if (leftXs.get(i) ==  iterator) {
+                    System.out.println("x" + leftXs.get(i).intValue() + " = " + String
+                            .format("%.2f", problemToSolve.getMatrixElement(i, Math.max(0, problemToSolve.getAmountOfColumns() - 1))));
+                    flag = true;
+                }
+            }
+            if (!flag) System.out.println("x" + iterator + " = 0,0");
+            ++iterator;
+        }
+        System.out.println("function = " + String.format("%.2f",
+                -1 * functionBelow.get(Math.max(0, problemToSolve.getAmountOfColumns() - 1))));
+    }
+
 }

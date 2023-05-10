@@ -12,28 +12,20 @@ public class Main {
         problemToSolve.printCurrentState();
 
         ProblemToSolve.prepareMatrix();
-        SimplexMethod.init(problemToSolve);
 
-        while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) {
-            SimplexMethod.makeStep(problemToSolve);
-            problemToSolve.printCurrentState();
-        }
+        int amountOfTimes = problemToSolve.simulatedBasis() ? 2 : 1;
 
-        //debug
-        if (SimplexMethod.checkState(problemToSolve).equals(State.ERROR)) System.out.println("ERROR");
-        else System.out.println("DONE");
-
-        if (problemToSolve.simulatedBasis()) {
+        for (int i = 0; i < amountOfTimes; ++i) {
             SimplexMethod.init(problemToSolve);
+
             while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) {
                 SimplexMethod.makeStep(problemToSolve);
                 problemToSolve.printCurrentState();
             }
+
+            //debug
+            if (SimplexMethod.checkState(problemToSolve).equals(State.ERROR)) System.out.println("ERROR");
+            else SimplexMethod.getAnswer(problemToSolve);
         }
-
-        //debug
-        if (SimplexMethod.checkState(problemToSolve).equals(State.ERROR)) System.out.println("ERROR");
-        else System.out.println("DONE");
-
     }
 }

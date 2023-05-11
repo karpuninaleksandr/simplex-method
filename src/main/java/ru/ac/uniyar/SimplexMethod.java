@@ -7,10 +7,12 @@ public class SimplexMethod {
     private static ArrayList<Double> topXs;
     private static ArrayList<Double> functionBelow;
     private static int oldAmountOfColumns;
+    private static boolean secondTime;
 
     public static void init(ProblemToSolve problemToSolve) {
         System.out.print("Simplex method init... ");
         if (problemToSolve.getState().equals(State.DONE)) {
+            secondTime = true;
             initializeFunctionBelow(problemToSolve);
             checkState(problemToSolve);
             System.out.println("done.");
@@ -127,6 +129,11 @@ public class SimplexMethod {
             }
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
             if (functionBelow.get(i) < 0) return problemToSolve.setState(State.IN_PROGRESS);
+        if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE) && !secondTime) {
+            boolean check = false;
+            for (int i = 0; i < functionBelow.size() - 1; ++i) if (functionBelow.get(i) != 0) check = true;
+            if (check) return problemToSolve.setState(State.ERROR);
+        }
         return problemToSolve.setState(State.DONE);
     }
 
@@ -163,6 +170,14 @@ public class SimplexMethod {
             while (iterator >= 0) {
                 if (!topXs.contains((double) iterator + 1)) newFunctionBelow.remove(iterator);
                 --iterator;
+            }
+            int iter = 0;
+            while (iter < leftXs.size()) {
+                if (leftXs.get(iter) - 1 >= oldAmountOfColumns) {
+                    problemToSolve.getMatrix().remove(iter);
+                    leftXs.remove(iter);
+                }
+                ++iter;
             }
             for (int i = 0; i < leftXs.size(); ++i) {
                 while (functionToChange.get(leftXs.get(i).intValue() - 1) != 0) {

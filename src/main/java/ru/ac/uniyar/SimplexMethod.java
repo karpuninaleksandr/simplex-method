@@ -67,6 +67,7 @@ public class SimplexMethod {
             for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
                 if (functionBelow.get(i) < 0)
                     for (int j = 0; j < problemToSolve.getAmountOfRows(); ++j)
+                        if (leftXs.get(j) - 1 >= oldAmountOfColumns)
                         if (problemToSolve.getMatrixElement(j, i) > 0 &&
                                 problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
                                 / problemToSolve.getMatrixElement(j, i) < diff) {
@@ -131,7 +132,7 @@ public class SimplexMethod {
             if (functionBelow.get(i) < 0) return problemToSolve.setState(State.IN_PROGRESS);
         if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE) && !secondTime) {
             boolean check = false;
-            for (int i = 0; i < functionBelow.size() - 1; ++i) if (functionBelow.get(i) != 0) check = true;
+            for (int i = 0; i < functionBelow.size() - 1; ++i) if (functionBelow.get(i).intValue() != 0) check = true;
             if (check) return problemToSolve.setState(State.ERROR);
         }
         return problemToSolve.setState(State.DONE);
@@ -163,37 +164,43 @@ public class SimplexMethod {
     }
 
     private static void initializeFunctionBelow(ProblemToSolve problemToSolve) {
-        ArrayList<Double> newFunctionBelow = new ArrayList<>(problemToSolve.getFunction());
+        ArrayList<Double> newFunctionBelow = new ArrayList<>();
         ArrayList<Double> functionToChange = new ArrayList<>(problemToSolve.getFunction());
         if (problemToSolve.simulatedBasis()) {
-            int iterator = oldAmountOfColumns - 2;
-            while (iterator >= 0) {
-                if (!topXs.contains((double) iterator + 1)) newFunctionBelow.remove(iterator);
-                --iterator;
-            }
+            for (int i = 0; i < topXs.size(); ++i)
+                newFunctionBelow.add((double) (functionToChange.get(topXs.get(i).intValue() - 1).intValue()));
+            newFunctionBelow.add(functionToChange.get(functionToChange.size() - 1));
             int iter = 0;
             while (iter < leftXs.size()) {
                 if (leftXs.get(iter) - 1 >= oldAmountOfColumns) {
                     problemToSolve.getMatrix().remove(iter);
+                    problemToSolve.decreaseAmountOfRows();
                     leftXs.remove(iter);
                 }
                 ++iter;
             }
+            System.out.println(newFunctionBelow);
             for (int i = 0; i < leftXs.size(); ++i) {
                 while (functionToChange.get(leftXs.get(i).intValue() - 1) != 0) {
+                    System.out.println("x" + (leftXs.get(i).intValue()));
                     if (functionToChange.get(leftXs.get(i).intValue() - 1) < 0) {
                         changeNumber(functionToChange, leftXs.get(i).intValue() - 1,
                                 functionToChange.get(leftXs.get(i).intValue() - 1) + 1);
-                        for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
+                        for (int j = 0; j < problemToSolve.getAmountOfColumns() - 1; ++j)
                             changeNumber(newFunctionBelow, j, newFunctionBelow.get(j) + problemToSolve.getMatrixElement(i, j));
-                        }
+                        changeNumber(newFunctionBelow, problemToSolve.getAmountOfColumns() - 1,
+                                newFunctionBelow.get(problemToSolve.getAmountOfColumns() - 1) +
+                                        problemToSolve.getMatrixElement(i, problemToSolve.getAmountOfColumns() - 1));
                     } else {
                         changeNumber(functionToChange, leftXs.get(i).intValue() - 1,
                                 functionToChange.get(leftXs.get(i).intValue() - 1) - 1);
-                        for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
+                        for (int j = 0; j < problemToSolve.getAmountOfColumns() - 1; ++j)
                             changeNumber(newFunctionBelow, j, newFunctionBelow.get(j) - problemToSolve.getMatrixElement(i, j));
-                        }
+                        changeNumber(newFunctionBelow, problemToSolve.getAmountOfColumns() - 1,
+                                newFunctionBelow.get(problemToSolve.getAmountOfColumns() - 1) -
+                                        problemToSolve.getMatrixElement(i, problemToSolve.getAmountOfColumns() - 1));
                     }
+                    System.out.println(newFunctionBelow.toString());
                 }
             }
             functionBelow = newFunctionBelow;

@@ -8,8 +8,8 @@ public class Main {
         if (!problemToSolve.simulatedBasis()) {
             GaussMethod.straightWay(problemToSolve);
             GaussMethod.backwards(problemToSolve);
+            problemToSolve.printCurrentState();
         }
-        problemToSolve.printCurrentState();
 
         ProblemToSolve.prepareMatrix();
 

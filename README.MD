@@ -3,3 +3,5 @@ how to use input:
 2) function itself
 3) matrix
 4) minor
+5) isAutomatic
+6) simulatedBasis

@@ -82,6 +82,9 @@ public class ProblemToSolve {
     public void decreaseAmountOfColumns() {
         --amountOfColumns;
     }
+    public void decreaseAmountOfRows() {
+        --amountOfRows;
+    }
 
     public boolean isAutomatic() {
         return isAutomatic;

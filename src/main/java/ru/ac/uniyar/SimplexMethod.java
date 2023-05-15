@@ -1,6 +1,7 @@
 package ru.ac.uniyar;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class SimplexMethod {
     private static ArrayList<Double> leftXs;
@@ -60,61 +61,63 @@ public class SimplexMethod {
 
     public static void makeStep(ProblemToSolve problemToSolve) {
         System.out.print("Simplex method step... ");
+        int row, column;
         if (problemToSolve.isAutomatic()) {
-            int row = 0;
-            int column = 0;
+            row = 0;
+            column = 0;
             double diff = Integer.MAX_VALUE;
             for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
                 if (functionBelow.get(i) < 0)
                     for (int j = 0; j < problemToSolve.getAmountOfRows(); ++j)
-                        if (leftXs.get(j) - 1 >= oldAmountOfColumns)
+//                    if (leftXs.get(j) >= oldAmountOfColumns)
                         if (problemToSolve.getMatrixElement(j, i) > 0 &&
                                 problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
-                                / problemToSolve.getMatrixElement(j, i) < diff) {
+                                        / problemToSolve.getMatrixElement(j, i) < diff) {
                             row = j;
                             column = i;
                             diff = problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
                                     / problemToSolve.getMatrixElement(j, i);
                         }
-            ArrayList<Double> oldColumn = new ArrayList<>();
-            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) oldColumn.add(i, problemToSolve.getMatrixElement(i, column));
-            oldColumn.add(problemToSolve.getAmountOfRows(), functionBelow.get(column));
-            double tmp = topXs.get(column);
-            changeNumber(topXs, column, leftXs.get(row));
-            changeNumber(leftXs, row, tmp);
-            changeNumber(problemToSolve.getMatrix().get(row), column, 1 / problemToSolve.getMatrixElement(row, column));
-            for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i) {
-                if (i == column) continue;
-                changeNumber(problemToSolve.getMatrix().get(row), i, problemToSolve.getMatrixElement(row, i)
-                        * problemToSolve.getMatrixElement(row, column));
-            }
-            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
-                if (i == row) continue;
-                changeNumber(problemToSolve.getMatrix().get(i), column, problemToSolve.getMatrixElement(i, column)
-                        * problemToSolve.getMatrixElement(row, column) * -1);
-            }
-            changeNumber(functionBelow, column, functionBelow.get(column) * problemToSolve.getMatrixElement(row, column) * -1);
-            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
-                if (i == row) continue;
-                for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
-                    if (j == column) continue;
-                    changeNumber(problemToSolve.getMatrix().get(i), j, problemToSolve.getMatrixElement(i, j)
-                            - oldColumn.get(i) * problemToSolve.getMatrixElement(row, j));
-                }
-            }
-            for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i) {
-                if (i == column) continue;
-                changeNumber(functionBelow, i, functionBelow.get(i)
-                        - oldColumn.get(problemToSolve.getAmountOfRows()) * problemToSolve.getMatrixElement(row, i));
-            }
-            if (problemToSolve.simulatedBasis() && topXs.get(column) >= oldAmountOfColumns) {
-                problemToSolve.decreaseAmountOfColumns();
-                topXs.remove(column);
-                functionBelow.remove(column);
-                for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) problemToSolve.removeElement(i, column);
-            }
         } else {
-            //TODO make choosing of element
+            row = getElement();
+            column = getElement();
+        }
+        ArrayList<Double> oldColumn = new ArrayList<>();
+        for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) oldColumn.add(i, problemToSolve.getMatrixElement(i, column));
+        oldColumn.add(problemToSolve.getAmountOfRows(), functionBelow.get(column));
+        double tmp = topXs.get(column);
+        changeNumber(topXs, column, leftXs.get(row));
+        changeNumber(leftXs, row, tmp);
+        changeNumber(problemToSolve.getMatrix().get(row), column, 1 / problemToSolve.getMatrixElement(row, column));
+        for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i) {
+            if (i == column) continue;
+            changeNumber(problemToSolve.getMatrix().get(row), i, problemToSolve.getMatrixElement(row, i)
+                    * problemToSolve.getMatrixElement(row, column));
+        }
+        for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
+            if (i == row) continue;
+            changeNumber(problemToSolve.getMatrix().get(i), column, problemToSolve.getMatrixElement(i, column)
+                    * problemToSolve.getMatrixElement(row, column) * -1);
+        }
+        changeNumber(functionBelow, column, functionBelow.get(column) * problemToSolve.getMatrixElement(row, column) * -1);
+        for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) {
+            if (i == row) continue;
+            for (int j = 0; j < problemToSolve.getAmountOfColumns(); ++j) {
+                if (j == column) continue;
+                changeNumber(problemToSolve.getMatrix().get(i), j, problemToSolve.getMatrixElement(i, j)
+                        - oldColumn.get(i) * problemToSolve.getMatrixElement(row, j));
+            }
+        }
+        for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i) {
+            if (i == column) continue;
+            changeNumber(functionBelow, i, functionBelow.get(i)
+                    - oldColumn.get(problemToSolve.getAmountOfRows()) * problemToSolve.getMatrixElement(row, i));
+        }
+        if (problemToSolve.simulatedBasis() && topXs.get(column) >= oldAmountOfColumns) {
+            problemToSolve.decreaseAmountOfColumns();
+            topXs.remove(column);
+            functionBelow.remove(column);
+            for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) problemToSolve.removeElement(i, column);
         }
         System.out.println("done.");
     }
@@ -123,13 +126,13 @@ public class SimplexMethod {
         if (problemToSolve.getMatrix().stream().anyMatch(it -> (it.get(problemToSolve.getAmountOfColumns() - 1)) < 0))
             return problemToSolve.setState(State.ERROR);
         for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
-            if (functionBelow.get(i) < 0) {
+            if (functionBelow.get(i).intValue() < 0) {
                 int finalI = i;
                 if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= 0).count() == problemToSolve.getAmountOfRows())
                     return problemToSolve.setState(State.ERROR);
             }
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
-            if (functionBelow.get(i) < 0) return problemToSolve.setState(State.IN_PROGRESS);
+            if (functionBelow.get(i).intValue() < 0) return problemToSolve.setState(State.IN_PROGRESS);
         if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE) && !secondTime) {
             boolean check = false;
             for (int i = 0; i < functionBelow.size() - 1; ++i) if (functionBelow.get(i).intValue() != 0) check = true;
@@ -172,7 +175,7 @@ public class SimplexMethod {
             newFunctionBelow.add(functionToChange.get(functionToChange.size() - 1));
             int iter = 0;
             while (iter < leftXs.size()) {
-                if (leftXs.get(iter) - 1 >= oldAmountOfColumns) {
+                if (leftXs.get(iter)>= oldAmountOfColumns) {
                     problemToSolve.getMatrix().remove(iter);
                     problemToSolve.decreaseAmountOfRows();
                     leftXs.remove(iter);
@@ -219,5 +222,21 @@ public class SimplexMethod {
                             changeNumber(functionBelow, j, functionBelow.get(j) - problemToSolve.getMatrixElement(i, j));
                     }
         }
+    }
+
+    //temporary
+    private static int getElement() {
+        System.out.print("ENTER INTEGER: ");
+        Scanner scanner = new Scanner(System.in);
+        int output = -1;
+        while (output == -1) {
+            try {
+                output = Integer.parseInt(scanner.nextLine());
+                if (output < 0) output = -1;
+            } catch (Exception e) {
+                System.out.print("ENTER INTEGER: ");
+            }
+        }
+        return output;
     }
 }

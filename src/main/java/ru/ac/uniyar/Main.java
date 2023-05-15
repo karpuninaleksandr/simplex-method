@@ -18,6 +18,7 @@ public class Main {
         for (int i = 0; i < amountOfTimes; ++i) {
             if (!problemToSolve.getState().equals(State.ERROR)) {
                 SimplexMethod.init(problemToSolve);
+                problemToSolve.printCurrentState();
 
                 while (SimplexMethod.checkState(problemToSolve).equals(State.IN_PROGRESS)) {
                     SimplexMethod.makeStep(problemToSolve);

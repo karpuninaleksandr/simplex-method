@@ -125,17 +125,17 @@ public class SimplexMethod {
     public static State checkState(ProblemToSolve problemToSolve) {
         if (problemToSolve.getMatrix().stream().anyMatch(it -> (it.get(problemToSolve.getAmountOfColumns() - 1)) < 0))
             return problemToSolve.setState(State.ERROR);
-        for (int i = 0; i < problemToSolve.getAmountOfColumns(); ++i)
-            if (functionBelow.get(i).intValue() < 0) {
+        for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
+            if (Math.round(functionBelow.get(i)) < 0) {
                 int finalI = i;
                 if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= 0).count() == problemToSolve.getAmountOfRows())
                     return problemToSolve.setState(State.ERROR);
             }
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
-            if (functionBelow.get(i).intValue() < 0) return problemToSolve.setState(State.IN_PROGRESS);
+            if (Math.round(functionBelow.get(i)) < 0) return problemToSolve.setState(State.IN_PROGRESS);
         if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE) && !secondTime) {
             boolean check = false;
-            for (int i = 0; i < functionBelow.size() - 1; ++i) if (functionBelow.get(i).intValue() != 0) check = true;
+            for (int i = 0; i < functionBelow.size() - 1; ++i) if (Math.round(functionBelow.get(i)) != 0) check = true;
             if (check) return problemToSolve.setState(State.ERROR);
         }
         return problemToSolve.setState(State.DONE);

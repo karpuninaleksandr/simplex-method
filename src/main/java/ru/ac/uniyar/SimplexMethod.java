@@ -82,6 +82,9 @@ public class SimplexMethod {
             row = getElement();
             column = getElement();
         }
+        System.out.println("element: " + row + " " + column);
+        System.out.println(topXs);
+        System.out.println(functionBelow);
         ArrayList<Double> oldColumn = new ArrayList<>();
         for (int i = 0; i < problemToSolve.getAmountOfRows(); ++i) oldColumn.add(i, problemToSolve.getMatrixElement(i, column));
         oldColumn.add(problemToSolve.getAmountOfRows(), functionBelow.get(column));
@@ -123,19 +126,20 @@ public class SimplexMethod {
     }
 
     public static State checkState(ProblemToSolve problemToSolve) {
-        if (problemToSolve.getMatrix().stream().anyMatch(it -> (it.get(problemToSolve.getAmountOfColumns() - 1)) < 0))
+        if (problemToSolve.getMatrix().stream().anyMatch(it -> (it.get(problemToSolve.getAmountOfColumns() - 1)) < -0.0000000001))
             return problemToSolve.setState(State.ERROR);
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
-            if (Math.round(functionBelow.get(i)) < 0) {
+            if (functionBelow.get(i) < -0.0000000001) {
                 int finalI = i;
-                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= 0).count() == problemToSolve.getAmountOfRows())
+                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= -0.0000000001).count()
+                        == problemToSolve.getAmountOfRows())
                     return problemToSolve.setState(State.ERROR);
             }
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
-            if (Math.round(functionBelow.get(i)) < 0) return problemToSolve.setState(State.IN_PROGRESS);
+            if (functionBelow.get(i) < -0.0000000001) return problemToSolve.setState(State.IN_PROGRESS);
         if (problemToSolve.simulatedBasis() && problemToSolve.getState().equals(State.DONE) && !secondTime) {
             boolean check = false;
-            for (int i = 0; i < functionBelow.size() - 1; ++i) if (Math.round(functionBelow.get(i)) != 0) check = true;
+            for (int i = 0; i < functionBelow.size() - 1; ++i) if (!(Math.abs(functionBelow.get(i)) < 0.0000000001)) check = true;
             if (check) return problemToSolve.setState(State.ERROR);
         }
         return problemToSolve.setState(State.DONE);

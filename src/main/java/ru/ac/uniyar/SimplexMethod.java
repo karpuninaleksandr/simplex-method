@@ -72,7 +72,7 @@ public class SimplexMethod {
 //                    if (leftXs.get(j) >= oldAmountOfColumns)
                         if (problemToSolve.getMatrixElement(j, i) > 0 &&
                                 problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
-                                        / problemToSolve.getMatrixElement(j, i) < diff) {
+                                        / problemToSolve.getMatrixElement(j, i) <= diff) {
                             row = j;
                             column = i;
                             diff = problemToSolve.getMatrixElement(j, problemToSolve.getAmountOfColumns() - 1)
@@ -131,7 +131,7 @@ public class SimplexMethod {
         for (int i = 0; i < problemToSolve.getAmountOfColumns() - 1; ++i)
             if (functionBelow.get(i) < -0.0000000001) {
                 int finalI = i;
-                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= -0.0000000001).count()
+                if (problemToSolve.getMatrix().stream().filter(it -> it.get(finalI) <= -0.0000000001 || it.get(finalI) == 0).count()
                         == problemToSolve.getAmountOfRows())
                     return problemToSolve.setState(State.ERROR);
             }

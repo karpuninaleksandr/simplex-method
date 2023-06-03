@@ -16,7 +16,7 @@ public class LabApplication extends Application {
         URL fxmlLocation = getClass().getResource("/main-page.fxml");
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         scene = new Scene(loader.load(), 1300, 800);
-        stage.setTitle("Simplex Method Lab");
+        stage.setTitle("Симплекс метод");
         stage.setScene(scene);
         stage.show();
     }

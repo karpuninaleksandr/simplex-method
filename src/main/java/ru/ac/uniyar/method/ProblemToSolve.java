@@ -1,4 +1,4 @@
-package ru.ac.uniyar;
+package ru.ac.uniyar.method;
 
 import java.io.File;
 import java.io.FileNotFoundException;

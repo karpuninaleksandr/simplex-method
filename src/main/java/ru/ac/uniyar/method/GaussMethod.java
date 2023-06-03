@@ -1,4 +1,4 @@
-package ru.ac.uniyar;
+package ru.ac.uniyar.method;
 
 import java.util.ArrayList;
 import java.util.List;

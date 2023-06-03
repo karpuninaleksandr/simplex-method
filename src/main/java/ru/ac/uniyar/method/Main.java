@@ -1,4 +1,4 @@
-package ru.ac.uniyar;
+package ru.ac.uniyar.method;
 
 public class Main {
     public static void main(String[] args) {

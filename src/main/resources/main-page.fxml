@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.ac.uniyar.application.MainPageController" fx:id="mainPane">
+    <Label>HELLO</Label>
+<!--    <children>-->
+<!--        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"-->
+<!--              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
+<!--            <StackPane>-->
+<!--                <children>-->
+<!--                    <MenuBar>-->
+<!--                        <menus>-->
+<!--                            <Menu mnemonicParsing="false" text="Справочная информация">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="О приложении" onAction="#onAboutAppButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="О разработчике" onAction="#onAboutProgrammerButtonClick"/>-->
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                            <Menu mnemonicParsing="false" text="Бренды">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список всех брендов" onAction="#onShowBrandsButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Добавление бренда" onAction="#onAddBrandButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Удаление бренда" onAction="#onDeleteBrand"/>-->
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                            <Menu mnemonicParsing="false" text="Станки">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список всех станков" onAction="#onShowMachinesButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Добавление станка" onAction="#onAddMachineButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Удаление станка" onAction="#onDeleteMachine"/>-->
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                            <Menu mnemonicParsing="false" text="Клиенты">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список всех клиентов" onAction="#onShowClientsButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Добавление клиента" onAction="#onAddClientButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Удаление клиента" onAction="#onDeleteClient"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Найти клиента" onAction="#onShowClientsViaRegexButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список клиентов, оплативших наперед" onAction="#onGetForwardPayersButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список неплательщиков" onAction="#onGetDebtOwnersButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Рассчитать долг клиента" onAction="#onGetClientDebtsButtonClick"/>-->
+
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                            <Menu mnemonicParsing="false" text="Договоры об аренде">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список всех договоров" onAction="#onShowRentAgreementsButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Добавление договора" onAction="#onAddRentAgreementButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Удаление договора" onAction="#onDeleteRentAgreement"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Продлить договор" onAction="#onEditEndDateButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Найти договоры по дате заключения" onAction="#onShowRentAgreementsBetweenDatesButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Изменить тариф аренды в договоре" onAction="#onEditRateButtonClick"/>-->
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                            <Menu mnemonicParsing="false" text="Истории платежей">-->
+<!--                                <items>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Список всех платежей" onAction="#onShowPaymentsButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Добавление платежа" onAction="#onAddPaymentButtonClick"/>-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Удаление платежа" onAction="#onDeletePayment"/>-->
+<!--                                </items>-->
+<!--                            </Menu>-->
+<!--                        </menus>-->
+<!--                    </MenuBar>-->
+<!--                    <Label text="Деревообрабатывающие станки" StackPane.alignment="CENTER_RIGHT">-->
+<!--                        <StackPane.margin>-->
+<!--                            <Insets right="10.0" />-->
+<!--                        </StackPane.margin>-->
+<!--                    </Label>-->
+<!--                </children>-->
+<!--            </StackPane>-->
+<!--            <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="mainPane">-->
+<!--                <padding>-->
+<!--                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>-->
+<!--                </padding>-->
+<!--                <VBox layoutX="300" layoutY="125">-->
+<!--                    <Label text="                               О приложении"/>-->
+<!--                    <Label text="   Приложение - реализация лабораторной работы по курсу"/>-->
+<!--                    <Label text="Система управления базами данных Oracle."/>-->
+<!--                    <Label text="Все управление в приложении реализовано через меню в верхней"/>-->
+<!--                    <Label text="его части, в центральной будет отрисовываться выбранный"/>-->
+<!--                    <Label text="пользователем в меню контент."/>-->
+<!--                    <Label text="Все поля имеют свои правила заполнения, все они интуитивно понятны, а если"/>-->
+<!--                    <Label text="формат входящих данных будет неправилен, появится контекстное сообщение"/>-->
+<!--                    <Label text="о неправильном вводе."/>-->
+<!--                    <Label text="Важная ремарка ввода нецелочисленных значений: при вводе такого числа"/>-->
+<!--                    <Label text="разделителем между целой и дробной частью следует использовать точку, а не запятую."/>-->
+<!--                </VBox>-->
+<!--            </AnchorPane>-->
+<!--        </VBox>-->
+<!--    </children>-->
+</AnchorPane>

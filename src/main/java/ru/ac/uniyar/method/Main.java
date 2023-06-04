@@ -11,7 +11,7 @@ public class Main {
             problemToSolve.printCurrentState();
         }
 
-        ProblemToSolve.prepareMatrix();
+        problemToSolve.prepareMatrix();
 
         int amountOfTimes = problemToSolve.simulatedBasis() ? 2 : 1;
 

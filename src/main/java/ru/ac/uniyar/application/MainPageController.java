@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import ru.ac.uniyar.method.GaussMethod;
 import ru.ac.uniyar.method.ProblemToSolve;
 
 import java.io.FileNotFoundException;
@@ -151,7 +152,7 @@ public class MainPageController {
 
     private void printDataToFile(int amountOfVariables, int amountOfLimits, String function, List<String> matrix,
                                  String minor, boolean isAutomatic, boolean isSimulatedBasis) {
-        try (PrintWriter writer = new PrintWriter("file.txt", StandardCharsets.UTF_8)) {
+        try (PrintWriter writer = new PrintWriter("input.txt", StandardCharsets.UTF_8)) {
             writer.println(amountOfLimits + " " + (amountOfVariables + 1));
             writer.println(function);
             matrix.forEach(writer::println);
@@ -164,6 +165,13 @@ public class MainPageController {
     }
 
     private void onMethodStart() {
+        problemToSolve = new ProblemToSolve();
+        if (!problemToSolve.simulatedBasis()) {
+            GaussMethod.straightWay(problemToSolve);
+            GaussMethod.backwards(problemToSolve);
+            problemToSolve.printCurrentState();
+        }
+        problemToSolve.prepareMatrix();
 
     }
 }

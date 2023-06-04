@@ -65,7 +65,7 @@ public class ProblemToSolve {
         }
     }
 
-    public static void prepareMatrix() {
+    public void prepareMatrix() {
         for (int i = 0; i < amountOfRows; ++i) {
             if (matrix.get(i).get(amountOfColumns - 1) < 0) {
                 ArrayList<Double> newLine = new ArrayList<>();

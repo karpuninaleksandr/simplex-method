@@ -41,11 +41,6 @@ public class ProblemToSolve {
         }
     }
 
-    public static void printDataToFile(int amountOfRows, int amountOfColumns, ArrayList<Double> function,
-            ArrayList<ArrayList<Double>> matrix, ArrayList<Integer> minor, boolean isAutomatic, boolean simulatedBasis) {
-
-    }
-
     private void getData() {
         try {
             System.out.print("Checking for file... ");

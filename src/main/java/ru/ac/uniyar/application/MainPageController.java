@@ -9,6 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import ru.ac.uniyar.method.ProblemToSolve;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class MainPageController {
     @FXML
     private BorderPane mainPane;
@@ -89,7 +98,6 @@ public class MainPageController {
     }
 
     private void onLeftBoxInput(int amountOfVariables, int amountOfLimits, boolean isAutomatic, boolean isSimulatedBasis) {
-        System.out.println(amountOfVariables + " " + amountOfLimits + " " + isAutomatic + " " + isSimulatedBasis);
         if (!isSimulatedBasis) {
             Label minorLabel = new Label("Введите столбцы минора:");
             TextField minorTextField = new TextField();
@@ -103,17 +111,59 @@ public class MainPageController {
             public void handle(ActionEvent actionEvent) {
                 String function = ((TextField) topBox.getChildren().stream().filter(it -> it.getId() != null && it.getId()
                         .equals("function")).toList().get(0)).getText();
-                StringBuilder minor = new StringBuilder();
-                if (isSimulatedBasis) minor.append("0 ".repeat(Math.max(0, amountOfVariables)));
+                StringBuilder minor;
+                if (isSimulatedBasis) minor = new StringBuilder("0");
+                else minor = new StringBuilder();
+                if (isSimulatedBasis) minor.append(" 0".repeat(Math.max(0, amountOfVariables - 1)));
                 else minor.append(((TextField) topBox.getChildren().stream().filter(it -> it.getId() != null && it.getId()
                         .equals("minor")).toList().get(0)).getText());
-                onTopBoxInput(function, minor.toString());
+                onTopBoxInput(amountOfVariables, amountOfLimits, function, minor.toString(), isAutomatic, isSimulatedBasis);
+                topBox.setDisable(true);
             }
         });
         topBox.getChildren().add(input);
+
     }
 
-    private void onTopBoxInput(String function, String minor) {
-        System.out.println(function + " " + minor);
+    private void onTopBoxInput(int amountOfVariables, int amountOfLimits, String function, String minor, boolean isAutomatic,
+                               boolean isSimulatedBasis) {
+        centerBox = new VBox();
+        Label matrixLabel = new Label("Введите матрицу ограничений:");
+        centerBox.getChildren().add(matrixLabel);
+        for (int i = 0; i < amountOfLimits;) {
+            TextField field = new TextField();
+            field.setId("field" + ++i);
+            centerBox.getChildren().add(field);
+        }
+        Button input = new Button("Ввести");
+        input.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                List<String> matrix = centerBox.getChildren().stream().filter(it -> it.getId() != null && it.getId()
+                                .contains("field")).map(it -> ((TextField) it).getText()).toList();
+                printDataToFile(amountOfVariables, amountOfLimits, function, matrix, minor, isAutomatic, isSimulatedBasis);
+                onMethodStart();
+            }
+        });
+        centerBox.getChildren().add(input);
+        mainPane.setCenter(centerBox);
+    }
+
+    private void printDataToFile(int amountOfVariables, int amountOfLimits, String function, List<String> matrix,
+                                 String minor, boolean isAutomatic, boolean isSimulatedBasis) {
+        try (PrintWriter writer = new PrintWriter("file.txt", StandardCharsets.UTF_8)) {
+            writer.println(amountOfLimits + " " + (amountOfVariables + 1));
+            writer.println(function);
+            matrix.forEach(writer::println);
+            writer.println(minor);
+            writer.println(isAutomatic);
+            writer.println(isSimulatedBasis);
+        } catch (IOException e) {
+            System.out.println("error creating or writing to file");
+        }
+    }
+
+    private void onMethodStart() {
+
     }
 }
